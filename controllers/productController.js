@@ -20,14 +20,12 @@ const brandAdd = async (req, resp) => {
         if (data) {
             responseType.message = 'new brand added Succesfully';
             responseType.status = 200;
-
         }
         else {
             responseType.message = 'Error';
             responseType.status = 400;
         }
     }
-
 
     resp.status(responseType.status).send(responseType);
 }
@@ -59,7 +57,6 @@ const seriesAdd = async (req, resp) => {
     let { brandname, categoryname, series } = req.body;
     var responseType = {
         message: 'ok',
-
     }
     let user = await Products.findOne({ name: brandname });
     if (user) {
@@ -76,9 +73,6 @@ const seriesAdd = async (req, resp) => {
                 responseType.status = 400;
             }
         }
-
-
-
     } else {
         responseType.message = 'Error! brandname is not found';
         responseType.status = 403;

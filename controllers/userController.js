@@ -55,7 +55,7 @@ const userAdd = async (req, resp) => {
             let response = await data.save();
             responseType.message = 'Register Succesfully ';
             responseType.status = 200;
-            msgMailer(email,subject='Congratulation !', msg='You registered Succesfully with this mail .');
+            msgMailer(email, subject = 'Congratulation !', msg = 'You registered Succesfully with this mail .');
         }
 
 
@@ -85,7 +85,7 @@ const userLogin = async (req, resp) => {
             responseType.message = 'Login Successfully';
             responseType.token = myToken;
             responseType.status = 200;
-            msgMailer(email,subject='Congratulation !', msg='You Login Succesfully in Sppl Service app .');
+            msgMailer(email, subject = 'Congratulation !', msg = 'You Login Succesfully in Sppl Service app .');
         } else {
             responseType.message = 'Wrong Password';
             responseType.status = 401;
@@ -136,50 +136,50 @@ const googleLogin = async (req, resp) => {
 
 const userdetailUpdate = async (req, resp) => {
 
-        const { firstname, lastname, mobile, altmobile, email, address, city, state, pincode,productType, productname, complaint_type, warranty,purchaseMode,  purchase_date, set_serialno, query } = req.body;
-        console.log(req.body);
-        const brand = req.body.brand.toLowerCase();
-        const _id = req.params.id;
-        const user = await Users.users.findById(_id);
-        var responseType = {
-            message: 'ok'
-        }
+    const { firstname, lastname, mobile, altmobile, email, address, city, state, pincode, productType, productname, complaint_type, warranty, purchaseMode, purchase_date, set_serialno, query } = req.body;
+    console.log(req.body);
+    const brand = req.body.brand.toLowerCase();
+    const _id = req.params.id;
+    const user = await Users.users.findById(_id);
+    var responseType = {
+        message: 'ok'
+    }
 
-        let imagedata = new Users.data({
+    let imagedata = new Users.data({
 
-            firstname: firstname,
-            lastname: lastname,
-            mobile: mobile,
-            altmobile: altmobile,
-            email: email,
-            address: address, city: city, state: state, pincode: pincode,
-            brand: brand,
-            productType:productType,
-            productname: productname,
-            complaint_type: complaint_type,
-            warranty: warranty,
-            purchaseMode:purchaseMode,
-            purchase_date: purchase_date,
-            set_serialno: set_serialno,
-            query: query,
-            userId: _id,
-            status: 'initial',
-        })
+        firstname: firstname,
+        lastname: lastname,
+        mobile: mobile,
+        altmobile: altmobile,
+        email: email,
+        address: address, city: city, state: state, pincode: pincode,
+        brand: brand,
+        productType: productType,
+        productname: productname,
+        complaint_type: complaint_type,
+        warranty: warranty,
+        purchaseMode: purchaseMode,
+        purchase_date: purchase_date,
+        set_serialno: set_serialno,
+        query: query,
+        userId: _id,
+        status: 'initial',
+    })
 
-        const imagedata_id = imagedata._id;
-        user.datas.push({ data: imagedata_id });
-        const response = await imagedata.save();
-        const result = await user.save();
+    const imagedata_id = imagedata._id;
+    user.datas.push({ data: imagedata_id });
+    const response = await imagedata.save();
+    const result = await user.save();
 
-        if (response) {
-            responseType.status = 200;
-            responseType.id = imagedata_id;
-        }else{
-            responseType.status = 400;
-        }
-        resp.status(responseType.status).send(responseType);
+    if (response) {
+        responseType.status = 200;
+        responseType.id = imagedata_id;
+    } else {
+        responseType.status = 400;
+    }
+    resp.status(responseType.status).send(responseType);
 
-    
+
 
 }
 
@@ -350,15 +350,16 @@ const otpMailer = async (email, otp) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
-        secure: false,
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.OTPSENDACCOUNT,
-            pass: process.env.ACCOUNTPASS
+            user: process.env.OTPSENDACCOUNTDB,
+            pass: process.env.ACCOUNTPASSDB
         }
     });
 
     const mailOptions = {
-        from: process.env.OTPSENDACCOUNT,
+        from: process.env.OTPSENDACCOUNTDB,
         to: email,
         subject: 'Otp verify message',
         html: `<div style="padding:50px;background:#eee;">
@@ -385,23 +386,24 @@ const otpMailer = async (email, otp) => {
 
 }
 
-const msgMailer = async (email, subject, msg ) => {
-   
+const msgMailer = async (email, subject, msg) => {
+
 
     const nodemailer = require('nodemailer');
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
-        secure: false,
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.OTPSENDACCOUNT,
-            pass: process.env.ACCOUNTPASS
+            user: process.env.OTPSENDACCOUNTDB,
+            pass: process.env.ACCOUNTPASSDB
         }
     });
 
     const mailOptions = {
-        from: process.env.OTPSENDACCOUNT,
+        from: process.env.OTPSENDACCOUNTDB,
         to: email,
         subject: subject,
         html: `<div style="padding:50px;background:#eee;">
@@ -682,11 +684,11 @@ const pdfGet = async (req, resp) => {
 
 const registerWarranty = async (req, resp) => {
 
-    const { name,  mobile,  email, brand,productType, productname,   purchase_date  } = req.body;
- 
+    const { name, mobile, email, brand, productType, productname, purchase_date } = req.body;
+
     const data = req.file;
-      
-   
+
+
     var responseType = {
         message: 'ok'
     }
@@ -697,18 +699,18 @@ const registerWarranty = async (req, resp) => {
         mobile: mobile,
         email: email,
         brand: brand,
-        productType:productType,
+        productType: productType,
         productName: productname,
         purchaseDate: purchase_date,
         invoice: data
     })
     const response = await imagedata.save();
-  
+
 
     if (response) {
         responseType.status = 200;
-       
-    }else{
+
+    } else {
         responseType.status = 400;
     }
     resp.status(responseType.status).send(responseType);
