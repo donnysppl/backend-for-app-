@@ -4,7 +4,9 @@ const app = express();
 const bodyParser = require('body-parser');
 
 var cors = require('cors');
-app.use(cors());
+app.use(cors({
+    origin: '*',
+}));
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -26,11 +28,6 @@ const userRoute = require('./routes/users');
 const adminRoute = require('./routes/admins');
 
 const productRoute = require('./routes/products');
-
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://services.shopsppl.org');
-    next();
-});
 
 
 app.use('/users', userRoute)
