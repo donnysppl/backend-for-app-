@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 
 var cors = require('cors');
 app.use(cors({
-    origin: '*',
+    origin: ['http://localhost:3000','https://services.shopsppl.org'],
+    credentials: true, 
 }));
 
 app.use(express.json({ limit: "50mb" }));
