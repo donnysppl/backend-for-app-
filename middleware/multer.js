@@ -12,7 +12,7 @@ const upload = multer({
             
             var dir = './public/uploads/'+name+_id;
             if (!fs.existsSync(dir)){
-              fs.mkdirSync(dir);
+              fs.mkdirSync(dir , {recursive: true});
               cb(null, dir);
             
             }else
@@ -35,7 +35,7 @@ const uploadwarranty = multer({
             const name = 'registerwarrantyimages';
             var dir = './public/uploads/'+name;
             if (!fs.existsSync(dir)){
-              fs.mkdirSync(dir);
+              fs.mkdirSync(dir , {recursive: true});
               cb(null, dir);
             
             }else
