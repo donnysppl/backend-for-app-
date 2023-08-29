@@ -145,6 +145,8 @@ const userdetailUpdate = async (req, resp) => {
         message: 'ok'
     }
 
+    const reqID = await Users.data.count();
+    
     let imagedata = new Users.data({
 
         firstname: firstname,
@@ -164,6 +166,7 @@ const userdetailUpdate = async (req, resp) => {
         query: query,
         userId: _id,
         status: 'initial',
+        request_id: `#${reqID + 1}`,
     })
 
     const imagedata_id = imagedata._id;
