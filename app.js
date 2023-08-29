@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 var cors = require('cors');
 app.use(cors({
-    origin: ['http://localhost:3000','https://services.shopsppl.org'],
+    origin: ['http://localhost:3000','https://services.shopsppl.org','https://appdash.shopsppl.org'],
     credentials: true, 
 }));
 
