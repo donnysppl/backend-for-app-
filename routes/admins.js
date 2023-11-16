@@ -27,7 +27,8 @@ router.get('/adminservicerecord/:id', adminCtrl.adminServiceRecord);
 
 router.post('/paymentdelete/:id', adminCtrl.paymentDelete);
 
-router.get('/installation', adminCtrl.adminInstallationList);
+router.get('/installation/:brand', adminCtrl.adminInstallationList);
+// router.get('/installation/:brand', adminCtrl.adminInstallationList);
 
 router.post('/login', adminCtrl.adminLogin);
 
@@ -46,5 +47,9 @@ router.get('/paymentdetail/:id',  adminCtrl.paymentDetail);
 
 router.get('/warrantydata',  adminCtrl.warrantyData);
 
+// request status
+router.post('/request_status/add',  adminCtrl.requestStatusAdd);
+router.get('/request_status/list',  adminCtrl.requestStatusList);
+router.delete('/request_status/delete/:id',  adminCtrl.requestStatusDelete);
 
 module.exports = router;

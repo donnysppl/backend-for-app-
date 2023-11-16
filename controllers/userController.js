@@ -351,18 +351,20 @@ const otpMailer = async (email, otp) => {
     const nodemailer = require('nodemailer');
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
+        host: 'mail.shopsppl.org',
         port: 465,
         secure: true,
         auth: {
             user: process.env.OTPSENDACCOUNTDB,
             pass: process.env.ACCOUNTPASSDB
-        }
+        },
+        tls: {
+            rejectUnauthorized: false,
+          },
     });
 
     const mailOptions = {
-        from: process.env.OTPSENDACCOUNTDB,
+        from: 'no-reply@shopsppl.org',
         to: email,
         subject: 'Otp verify message',
         html: `<div style="padding:50px;background:#eee;">
@@ -395,14 +397,16 @@ const msgMailer = async (email, subject, msg) => {
     const nodemailer = require('nodemailer');
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
+        host: 'mail.shopsppl.org',
         port: 465,
         secure: true,
         auth: {
             user: process.env.OTPSENDACCOUNTDB,
             pass: process.env.ACCOUNTPASSDB
-        }
+        },
+        tls: {
+            rejectUnauthorized: false,
+          },
     });
 
     const mailOptions = {

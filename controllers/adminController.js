@@ -1,5 +1,6 @@
 const Admins = require('../models/admins');
 const Users = require('../models/users');
+const ReqStatus = require('../models/requeststatus');
 
 var bcrypt = require('bcryptjs');
 
@@ -173,17 +174,24 @@ const adminServiceList = async (req, resp) => {
 
 const adminInstallationList = async (req, resp) => {
 
-    let data = await Users.data.find({ complaint_type: 'Installation' });
-    // let data = await Users.data.find({ complaint_type: 'Service' });
+    const brand = req.params.brand;
     var responseType = {
         message: 'ok',
-
     }
-    if (data) {
+
+    if (brand === 'all') {
+        let data = await Users.data.find({ complaint_type: 'Installation' });
         responseType.message = 'Get list succesfull';
         responseType.status = 200;
         responseType.result = data;
     }
+    else {
+        let data = await Users.data.find({ complaint_type: 'Installation', brand: brand });
+        responseType.message = 'Get list succesfull';
+        responseType.status = 200;
+        responseType.result = data;
+    }
+
     resp.status(200).send(responseType);
 }
 
@@ -209,17 +217,25 @@ const serviceDetails = async (req, resp) => {
 
 const serviceStatus = async (req, res) => {
     const id = req.params.id;
-   
-   
-    const { status, adminid } = req.body;
+
+
+    const { status, adminid,reason } = req.body;
+    console.log(status, adminid,reason)
     var responseType = {
         message: 'ok',
     }
     const result = await Users.data.findById(id);
 
     if (result) {
+        const data = {
+            status: status,
+            doneby: adminid,
+            reason:reason,
+        }
         result.status = status;
         result.doneby = adminid;
+        result.status_reason = reason;
+        result.statusdata.push(data);
         result.save();
         responseType.status = 200;
         responseType.message = 'update succesfully';
@@ -228,7 +244,7 @@ const serviceStatus = async (req, res) => {
         responseType.status = 400;
         responseType.message = 'service not Found';
     }
-  
+
     res.status(200).send(responseType);
 }
 
@@ -379,31 +395,64 @@ const paymentDetail = async (req, resp) => {
 
 const adminServiceRecord = async (req, resp) => {
     const adminUserid = req.params.id;
-    const data = await Users.data.find({doneby : adminUserid});
-    if(!data){
-        resp.status(400).send({status:400,message:'Data Not Found'});
+    const data = await Users.data.find({ doneby: adminUserid });
+    if (!data) {
+        resp.status(400).send({ status: 400, message: 'Data Not Found' });
     }
-    else{
-        resp.status(200).send({status:200,message:'Data Successfull',data});
+    else {
+        resp.status(200).send({ status: 200, message: 'Data Successfull', data });
     }
-   
+
 }
 
 
 const warrantyData = async (req, resp) => {
-   
+
     const data = await Users.warrantyRegister.find();
-    
-    if(!data){
-        resp.status(400).send({status:400,message:'Data Not Found'});
+
+    if (!data) {
+        resp.status(400).send({ status: 400, message: 'Data Not Found' });
     }
-    else{
-        resp.status(200).send({status:200,message:'Data Successfull',data});
+    else {
+        resp.status(200).send({ status: 200, message: 'Data Successfull', data });
     }
-   
+
 }
 
+const requestStatusAdd = async (req, resp) => {
+    const { title } = req.body;
+    const dataExt = await ReqStatus.findOne({ title });
+    if (dataExt) {
+        resp.status(400).send({ status: 400, message: 'Data Exist' });
+    }
+    else {
+        const newData = new ReqStatus({ title });
+        const saveData = await newData.save();
+        resp.status(200).send({ status: 200, message: 'Data added', result: saveData });
 
+    }
+}
+const requestStatusList = async (req, resp) => {
+    
+    const dataExt = await ReqStatus.find();
+    if (!dataExt) {
+        resp.status(400).send({ status: 400, message: 'Data not found' });
+    }
+    else {
+        resp.status(200).send({ status: 200, message: 'Data found', result: dataExt });
+    }
+}
+const requestStatusDelete = async (req, resp) => {
+    const id = req.params.id;
+    ReqStatus.findByIdAndDelete({_id:id}, function (err, docs) { 
+        if (err){ 
+            resp.status(400).send({ status: 400, message: 'Data not Deleted' });
+        } 
+        else{ 
+            resp.status(200).send({ status: 200, message: 'Data Deleted' });
+        } 
+    }); 
+}
 
 module.exports = {
     adminLogin,
@@ -417,9 +466,9 @@ module.exports = {
     paymentDelete,
     dashboardData,
     paymentList,
-    paymentDetail, 
+    paymentDetail,
     serviceStatus,
     adminServiceRecord,
-    warrantyData
-
+    warrantyData,
+    requestStatusAdd, requestStatusList,requestStatusDelete
 }
