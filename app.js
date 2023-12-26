@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 var cors = require('cors');
 app.use(cors({
-    origin: ['http://localhost:3000','https://services.shopsppl.org','https://appdash.shopsppl.org'],
+    origin: ['http://localhost:3000','https://services.shopsppl.org','https://appdash.shopsppl.org','https://registration.shopsppl.org'],
     credentials: true, 
 }));
 
@@ -29,6 +29,7 @@ const userRoute = require('./routes/users');
 const adminRoute = require('./routes/admins');
 
 const productRoute = require('./routes/products');
+const productRegister = require('./routes/productregister');
 
 
 app.use('/users', userRoute)
@@ -36,6 +37,8 @@ app.use('/users', userRoute)
 app.use('/admins', adminRoute)
 
 app.use('/products', productRoute)
+
+app.use('/product-register', productRegister)
 
 
 app.use("/public", express.static(path.join(__dirname, 'public')));

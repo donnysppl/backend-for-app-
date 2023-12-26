@@ -28,6 +28,27 @@ const upload = multer({
     })
 });
 
+const prodRegisUpload = multer({
+    storage: multer.diskStorage({
+        destination: async (req, file, cb) => {
+            var dir = './public/register-product-upload/';
+            if (!fs.existsSync(dir)){
+              fs.mkdirSync(dir , {recursive: true});
+              cb(null, dir);
+            
+            }else
+            {
+                cb(null, dir);
+            }
+            
+        },
+        filename: (req, file, cb) => {
+            
+            cb(null,file.originalname);
+        }
+    })
+});
+
 const uploadwarranty = multer({
     storage: multer.diskStorage({
         destination: async (req, file, cb) => {
@@ -52,5 +73,5 @@ const uploadwarranty = multer({
 });
 
 module.exports = {
-    upload, uploadwarranty
+    upload, uploadwarranty,prodRegisUpload
 }
